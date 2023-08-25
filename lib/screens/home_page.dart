@@ -31,9 +31,13 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final user = users[index];
           return ListTile(
-            title: Text(user.fullName),
-            subtitle: Text(user.location.country),
-          );
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.network(user.picture.thumbnail),
+              ),
+              title: Text(user.fullName),
+              subtitle: Text(user.location.country),
+              trailing: Text(user.dob.age.toString()));
         },
       ),
     );
@@ -41,8 +45,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchUsers() async {
     final response = await UserApi.fetchUsers();
-    setState(() {
-      users = response;
-    });
+    if (response.isNotEmpty) {
+      setState(() {
+        users = response;
+      });
+    } else {
+      print('Nop Response from APi');
+    }
   }
 }
